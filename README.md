@@ -31,5 +31,9 @@ To access IRIS System Management Portal
 ```
 http://localhost:42773/csp/sys/UtilHome.csp
 ```
+Test data have been copied from     
+https://www.fittotravel.net/index.php/international-data/257-coordinates-of-world-capitals
+
+
 ### How to use it
 
