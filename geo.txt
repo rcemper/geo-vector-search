@@ -1,6 +1,5 @@
-https://www.fittotravel.net/index.php/international-data/257-coordinates-of-world-capitals
-
 CAPITAL	COUNTRY	LATITUDE	LONGITUDE
+*	*	0.0N	0.0E
 Kabul	Afghanistan	34.28N	69.11E
 Tirana	Albania	41.18N	19.49E
 Algiers	Algeria	36.42N	03.08E
