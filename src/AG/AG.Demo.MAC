@@ -10,7 +10,6 @@ Demo	;geo vectors
 	write !?5,"6 - Show Best Matches"
 	read !,"Select Function or * to exit : ",f,!
 	if $e(f)'?1N write !,"bye" quit
-	set ^rcc=$lb(0,0)
 	do $case($e(f),1:ini
 				,2:imp
 				,3:bas
@@ -43,6 +42,7 @@ imp
 			} )
 	if SQLCODE break
 	Write !?5,j," records imported",!
+	set ^rcc=$lb(0,0)
 	do gen
 	quit
 bas
