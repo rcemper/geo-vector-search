@@ -1,0 +1,106 @@
+ROUTINE AG.Demo
+Demo	;geo vectors
+	write !,"  Use Geographc Vectors "
+	write !,"========================="
+	write !?5,"1 - Initialize Tables"
+	write !?5,"2 - Import Data"
+	write !?5,"3 - Set Base Location"	
+	write !?5,"4 - Generate Vectors"
+	write !?5,"5 - Select Target Location"
+	write !?5,"6 - Show Best Matches"
+	read !,"Select Function or * to exit : ",f,!
+	if $e(f)'?1N write !,"bye" quit
+	set ^rcc=$lb(0,0)
+	do $case($e(f),1:ini
+				,2:imp
+				,3:bas
+				,4:gen
+				,5:tgt
+				,6:shw
+				,:back)
+	goto Demo    
+	
+ini
+	&SQL(DROP TABLE AG.GEO)
+	&SQL(CREATE TABLE AG.GEO (
+		CAPITAL	VARCHAR(60),
+		COUNTRY	VARCHAR(60),
+		LATITUDE VARCHAR(10),
+		LONGITUDE VARCHAR(10),
+		VBASE VECTOR(INTEGER,2), 
+        VWORK VECTOR(INTEGER,2),
+        VCOS DOUBLE )  
+		)
+	if SQLCODE break
+	&SQL(CREATE COLUMNAR INDEX cos on AG.GEO(VCOS))
+	if SQLCODE break
+back
+	quit
+imp
+	&SQL( LOAD DATA FROM FILE '/home/irisowner/dev/geo.txt' 
+			INTO AG.GEO (CAPITAL,COUNTRY,LATITUDE,LONGITUDE)
+			USING {"from":{"file":{"header":true,"columnseparator": "\t"}}
+			} )
+	if SQLCODE break
+	Write !?5,j," records imported",!
+	do gen
+	quit
+bas
+	do cty("Base")
+	&SQL(SELECT %external(VBASE) into :vb from AG.GEO where id=:id)
+	if SQLCODE break
+	set ^rcc=$LFS($tr(vb," "))
+	&SQL(SELECT capital into :bas from AG.GEO where id=:id)
+	Write !?5,"Vector Base set >> "_bas,!
+#;	quit
+gen
+	&SQL(UPDATE AG.GEO
+		SET VBASE=TO_VECTOR(AG.MK(LATITUDE,LONGITUDE),INT,2)
+			,VWORK=TO_VECTOR(AG.MK(LATITUDE,LONGITUDE,1),INT,2)
+	   )
+	if SQLCODE break
+	Write !?5,"Location Vectors Updated: "_%ROWCOUNT,!
+	quit
+tgt
+	do cty("Target")
+	&SQL(UPDATE AG.GEO as WK 
+		SET WK.VCOS = VECTOR_COSINE(WK.VWORK,BS.VWORK)
+		FROM AG.GEO as BS WHERE BS.ID=:id
+		)
+	if SQLCODE break
+	&SQL(SELECT capital into :tgt from AG.GEO where id=:id)
+	Write !?5,"Vector Target set >> "_tgt,!
+	quit
+ 	   
+shw 
+	read !,"Similarity limit (.995) : ",sim,!
+	; set sim=sim#1
+	if 'sim set sim=0.995
+	Write !?5,"Similar Vectors from "_bas_" to "_tgt,!!
+	set sql=3
+	set sql(1)="SELECT id,VCOS,capital,country "
+	set sql(2)="from AG.GEO where vcos > "_sim
+	set sql(3)="order by VCOS desc"
+	do sql
+	quit
+	
+cty(which)
+	set (id,nam)=""
+	while 'id {
+		write !,"Select "_which_" CITY by name ("_nam_"): "
+		read nam,!
+		if '$l(nam) continue
+		set sql=2
+		set sql(1)="select id,capital,country from AG.GEO "
+		set sql(2)="where UPPER(capital) %STARTSWITH '"_$zcvt(nam,"U")_"'"
+		do sql
+		read !,"Select ID: ",id,!
+	}	
+	quit
+	 		
+sql
+	set rs=##class(%SQL.Statement).%ExecDirect(.tStmt,.sql)
+	if rs.%SQLCODE break
+	do rs.%Display()
+	write !
+	quit	
