@@ -102,6 +102,8 @@ ID      VCOS    CAPITAL COUNTRY
 175     .99911210669970418329   Stockholm       Sweden
 3 Rows(s) Affected
 ```
+[DemoServer Mgmt Portal](https://geo-vector.demo.community.intersystems.com/csp/sys/UtilHome.csp)   
+[DemoServer WebTerminal](https://geo-vector.demo.community.intersystems.com/terminal/)
 
 [Article in DC #1](https://community.intersystems.com/post/geo-vector-search-1)     
 [Article in DC #2](https://community.intersystems.com/post/geo-vector-search-2)
