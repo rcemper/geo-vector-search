@@ -36,7 +36,7 @@ ini
 back
 	quit
 imp
-	&SQL( LOAD DATA FROM FILE '/home/irisowner/dev/geo.txt' 
+	&SQL( LOAD DATA FROM FILE '/opt/irisapp/src/geo.txt' 
 			INTO AG.GEO (CAPITAL,COUNTRY,LATITUDE,LONGITUDE)
 			USING {"from":{"file":{"header":true,"columnseparator": "\t"}}
 			} )
