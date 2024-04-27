@@ -107,3 +107,5 @@ ID      VCOS    CAPITAL COUNTRY
 
 [Article in DC #1](https://community.intersystems.com/post/geo-vector-search-1)     
 [Article in DC #2](https://community.intersystems.com/post/geo-vector-search-2)
+
+[Video](https://youtu.be/HYtZz49w_Tk)
