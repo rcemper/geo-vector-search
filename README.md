@@ -1,3 +1,6 @@
+<img src="https://community.intersystems.com/sites/default/files/inline/images/archived.gif" width=100></img>
+<b>&nbsp;no maintenance or update</b> 
+
 # Geographic use of vector search
 The example loads a list of worldwide capitals with their coordinates   
 The coordinates are interpreted as vectors from geographic point 0°N/0 W  
